@@ -14,7 +14,7 @@ export def main [
   --output (-o): path = "~/Downloads/screenshot.png" # The output path
   --prompt (-p): string = "○ " # The prompt indicator including space
   --width (-w): int # The maximum number of characters per line
-  command: string # The terminal command to show in the image
+  command?: string # The terminal command to show in the image
 ]: any -> nothing {
   let width = $width | default {
     let columns = term size | get columns
@@ -25,10 +25,12 @@ export def main [
   let input = $in | table --expand --width $width
   let input = try { $input | str trim } catch { $input }
 
+  let command = $command | default '' | format $prompt $format
+
   let code = [
-    $"(ansi white_dimmed)($prompt)(ansi reset)"
-    ($command | format $prompt $format | break insert $prompt $width | nu-highlight | break replace)
-    (if ($input | is-not-empty) { char newline })
+    (if ($command | is-not-empty) { $"(ansi white_dimmed)($prompt)(ansi reset)" })
+    (if ($command | is-not-empty) { $command | break insert $prompt $width | nu-highlight | break replace })
+    (if ($command | is-not-empty) and ($input | is-not-empty) { char newline })
     ($input)
   ] | str join
 
