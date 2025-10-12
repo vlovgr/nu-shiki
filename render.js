@@ -18,7 +18,7 @@ const rendered = await codeToHtml(code, {
   },
 });
 
-const html = `<!DOCTYPE html>
+const html = `<!doctype html>
 <html lang="en">
   <head>
     <title>nu-shiki</title>
