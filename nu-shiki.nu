@@ -10,6 +10,7 @@ const render = path self "render.js"
 # the file already exists, it will be overwritten.
 export def main [
   --debug (-d) # Print additional information for debug purposes
+  --lang (-l) = "ansi" # The shiki language to use
   --format (-f) # Insert newlines and indentation for top-level pipes
   --output (-o): path = "~/Downloads/screenshot.png" # The output path
   --prompt (-p): string = "○ " # The prompt indicator including space
@@ -39,7 +40,7 @@ export def main [
     print $"(char newline)($code)(char newline)"
   }
 
-  let rendered = do { ^node $render $code ($output | path expand) } | complete
+  let rendered = do { ^node $render $code $lang ($output | path expand) } | complete
   if $rendered.exit_code != 0 {
     error make { msg: ($rendered.stderr | str trim) }
   } else if $debug {

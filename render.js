@@ -2,10 +2,11 @@ import captureWebsite from "capture-website";
 import { codeToHtml } from "shiki";
 
 const code = process.argv[2];
-const output = process.argv[3];
+const lang = process.argv[3];
+const output = process.argv[4];
 
 const rendered = await codeToHtml(code, {
-  lang: "ansi",
+  lang: lang,
   theme: "material-theme",
   colorReplacements: {
     "#263238": "#1b2b34",
