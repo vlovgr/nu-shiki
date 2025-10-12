@@ -2,6 +2,8 @@
 
 Generate images of terminal commands with their outputs using [Node.js](https://nodejs.org) and [Shiki](https://shiki.style/).
 
+## Setup
+
 Make sure you have [Git](https://git-scm.com), [Node.js](https://nodejs.org) and [Nushell](https://www.nushell.sh) installed, and then run the following.
 
 ```nushell
@@ -12,6 +14,8 @@ use nu-shiki.nu
 ```
 
 You can optionally modify [`render.js`](render.js) with your own customizations (e.g. the font to use).
+
+## Usage
 
 You can then use `nu-shiki` to generate images (defaults to `~/Downloads/screenshot.png`).
 
