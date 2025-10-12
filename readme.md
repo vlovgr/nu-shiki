@@ -30,3 +30,5 @@ http get https://jsonplaceholder.typicode.com/posts
 ```
 
 <img width="599" height="204" alt="screenshot" src="https://github.com/user-attachments/assets/10e322e7-5bfd-4608-96dd-379123cfc070"/>
+
+Using the `--lang` option, you can render images of code in all <a href="https://shiki.style/languages">supported languages</a>.
