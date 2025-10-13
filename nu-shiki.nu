@@ -8,8 +8,16 @@ const render = path self "render.js"
 # the command to show in the image is passed explicitly. An
 # image will be generated to the --output (-o) path, and if
 # the file already exists, it will be overwritten.
+#
+# An alternative option is to provide --eval (-e) to both show
+# and run the provided command for its output. Evaluation gets
+# done using a default closure, or --eval-closure (-c) can be
+# provided with a custom closure for evaluation. Note syntax
+# highlighting might not work as expected with this option.
 export def main [
   --debug (-d) # Print additional information for debug purposes
+  --eval (-e) # Run the provided command to generate the output
+  --eval-closure (-c): closure # The closure with which to run code
   --lang (-l) = "ansi" # The shiki language to use
   --format (-f) # Insert newlines and indentation for top-level pipes
   --output (-o): path = "~/Downloads/screenshot.png" # The output path
@@ -17,34 +25,57 @@ export def main [
   --width (-w): int # The maximum number of characters per line
   command?: string # The terminal command to show in the image
 ]: any -> nothing {
+  let input = $in
+
   let width = $width | default {
     let columns = term size | get columns
     if $debug { print $"Using terminal columns for width: ($columns) characters." }
     $columns
   }
 
-  let input = $in | table --expand --width $width
-  let input = try { $input | str trim } catch { $input }
+  if $eval {
+    let eval_closure = if ($eval_closure | is-empty) {
+      if $debug {
+        print "Code will be evaluated using the default closure."
+        print $'(char newline)|commands: string| nu --login --commands $commands(char newline)'
+      }
 
-  let command = $command | default '' | format $prompt $format
+      { |commands: string| nu --login --commands $commands }
+    } else {
+      $eval_closure
+    }
 
-  let code = [
-    (if ($command | is-not-empty) { $"(ansi white_dimmed)($prompt)(ansi reset)" })
-    (if ($command | is-not-empty) { $command | break insert $prompt $width | nu-highlight | break replace })
-    (if ($command | is-not-empty) and ($input | is-not-empty) { char newline })
-    ($input)
-  ] | str join
+    let commands = $"($command) | nu-shiki --debug=($debug) --lang='($lang)' --format=($format) --output='($output)' --prompt='($prompt)' --width=($width) '($command)'"
+    if $debug {
+      print "The following generated code will be evaluated."
+      print $'(char newline)($commands)(char newline)'
+    }
 
-  if $debug {
-    print $"The following code will be rendered in the image."
-    print $"(char newline)($code)(char newline)"
-  }
+    do $eval_closure $commands
+  } else {
+    let input = $input | table --expand --width $width
+    let input = try { $input | str trim } catch { $input }
 
-  let rendered = do { ^node $render $code $lang ($output | path expand) } | complete
-  if $rendered.exit_code != 0 {
-    error make { msg: ($rendered.stderr | str trim) }
-  } else if $debug {
-    print $"Image successfully saved to ($output)."
+    let command = $command | default '' | format $prompt $format
+
+    let code = [
+      (if ($command | is-not-empty) { $"(ansi white_dimmed)($prompt)(ansi reset)" })
+      (if ($command | is-not-empty) { $command | break insert $prompt $width | nu-highlight | break replace })
+      (if ($command | is-not-empty) and ($input | is-not-empty) { char newline })
+      ($input)
+    ] | str join
+
+    if $debug {
+      print $"The following code will be rendered in the image."
+      print $"(char newline)($code)(char newline)"
+    }
+
+    let rendered = do { ^node $render $code $lang ($output | path expand) } | complete
+    if $rendered.exit_code != 0 {
+      error make { msg: ($rendered.stderr | str trim) }
+    } else if $debug {
+      print $"Image successfully saved to ($output)."
+    }
   }
 }
 
