@@ -33,4 +33,14 @@ http get https://jsonplaceholder.typicode.com/posts
 
 <img width="599" height="204" alt="screenshot" src="https://github.com/user-attachments/assets/10e322e7-5bfd-4608-96dd-379123cfc070"/>
 
+There is also the option to use `--eval` to both show and run the provided command.
+
+```nushell
+nu-shiki --format --eval $command
+```
+
+<img width="599" height="204" alt="screenshot" src="https://github.com/user-attachments/assets/3a8b5e52-1ca2-47d1-87cb-e8fe4c2ba854"/>
+
+Note syntax highlighting and colors may not always render as expected with this option.
+
 Using the `--lang` option, you can render images of code in all <a href="https://shiki.style/languages">supported languages</a>.
