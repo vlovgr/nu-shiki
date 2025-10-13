@@ -2,6 +2,8 @@
 
 Generate images of terminal commands with their outputs using [Node.js](https://nodejs.org) and [Shiki](https://shiki.style/).
 
+For more background, check out [Generating Images of Nushell Commands](https://vlovgr.se/posts/nu-shiki).
+
 ## Setup
 
 Make sure you have [Git](https://git-scm.com), [Node.js](https://nodejs.org) and [Nushell](https://www.nushell.sh) installed, and then run the following.
