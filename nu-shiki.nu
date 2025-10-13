@@ -34,15 +34,13 @@ export def main [
   }
 
   if $eval {
-    let eval_closure = if ($eval_closure | is-empty) {
+    let eval_closure = $eval_closure | default {
       if $debug {
         print "Code will be evaluated using the default closure."
         print $'(char newline)|commands: string| nu --login --commands $commands(char newline)'
       }
 
       { |commands: string| nu --login --commands $commands }
-    } else {
-      $eval_closure
     }
 
     let commands = $"($command) | nu-shiki --debug=($debug) --lang='($lang)' --format=($format) --output='($output)' --prompt='($prompt)' --width=($width) '($command)'"
