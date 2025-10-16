@@ -43,7 +43,7 @@ export def main [
       { |commands: string| nu --login --commands $commands }
     }
 
-    let commands = $"($command) | nu-shiki --debug=($debug) --lang='($lang)' --format=($format) --output='($output)' --prompt='($prompt)' --width=($width) '($command)'"
+    let commands = $"($command) | nu-shiki --debug=($debug) --lang=r#'($lang)'# --format=($format) --output=r#'($output)'# --prompt=r#'($prompt)'# --width=($width) r#'($command)'#"
     if $debug {
       print "The following generated code will be evaluated."
       print $'(char newline)($commands)(char newline)'
