@@ -1,9 +1,11 @@
 import captureWebsite from "capture-website";
 import { codeToHtml } from "shiki";
+import fs from "fs/promises";
 
 const code = process.argv[2];
 const lang = process.argv[3];
 const output = process.argv[4];
+const output_html = process.argv[5];
 
 const rendered = await codeToHtml(code, {
   lang: lang,
@@ -45,6 +47,10 @@ const html = `<!doctype html>
     <div id="view">${rendered}</div>
   </body>
 </html>`;
+
+if (output_html) {
+  await fs.writeFile(output_html, html);
+}
 
 await captureWebsite.file(html, output, {
   defaultBackground: false,

@@ -68,10 +68,13 @@ export def main [
       print $"(char newline)($code)(char newline)"
     }
 
-    let rendered = do { ^node $render $code $lang ($output | path expand) } | complete
+    let output_html = if $debug { mktemp --tmpdir --suffix .html } else { '' }
+
+    let rendered = do { ^node $render $code $lang ($output | path expand) $output_html } | complete
     if $rendered.exit_code != 0 {
       error make { msg: ($rendered.stderr | str trim) }
     } else if $debug {
+      print $"Website sucessfully saved to ($output_html)."
       print $"Image successfully saved to ($output)."
     }
   }
