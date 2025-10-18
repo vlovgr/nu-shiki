@@ -74,8 +74,8 @@ export def main [
     if $rendered.exit_code != 0 {
       error make { msg: ($rendered.stderr | str trim) }
     } else if $debug {
-      print $"Website sucessfully saved to ($output_html)."
-      print $"Image successfully saved to ($output)."
+      print $"HTML was saved to ($output_html)."
+      print $"Image was saved to ($output)."
     }
   }
 }
