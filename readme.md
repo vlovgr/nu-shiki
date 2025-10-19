@@ -19,7 +19,7 @@ You can optionally modify [`render.js`](render.js) with your own customizations 
 
 ## Usage
 
-You can then use `nu-shiki` to generate images (defaults to `~/Downloads/screenshot.png`).
+Once setup, you can use `nu-shiki` to generate images (defaults to `~/Downloads/screenshot.png`).
 
 ```nushell
 let command = "http get https://jsonplaceholder.typicode.com/posts | where userId == 1 | first 3 | select id title"
