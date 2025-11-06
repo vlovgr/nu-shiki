@@ -42,3 +42,7 @@ nu-shiki --format --eval $command
 Note syntax highlighting and colors may not always render as expected with this option.
 
 Using the `--lang` option, you can render images of code in all <a href="https://shiki.style/languages">supported languages</a>.
+
+## Updates
+
+Use `git pull` to fetch latest changes and make sure to run `npm install` afterwards.
