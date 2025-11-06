@@ -21,11 +21,25 @@ export def main [
   --lang (-l) = "ansi" # The shiki language to use
   --format (-f) # Insert newlines and indentation for top-level pipes
   --output (-o): path = "~/Downloads/screenshot.png" # The output path
+  --output-type (-t): string@[jpeg pdf png webp] # The output type (defaults to guessing)
   --prompt (-p): string = "○ " # The prompt indicator including space
   --width (-w): int # The maximum number of characters per line
   command?: string # The terminal command to show in the image
 ]: any -> nothing {
   let input = $in
+
+  let output_type = $output_type | default {
+    let type = match $output {
+      $s if $s =~ '\.(jpg|jpeg)$' => 'jpeg'
+      $s if $s =~ '\.pdf$' => 'pdf'
+      $s if $s =~ '\.png$' => 'png'
+      $s if $s =~ '\.webp$' => 'webp'
+      _ => { if $debug { print "Unable to guess output type from output path." }; 'png' }
+    }
+
+    if $debug { print $"No output type specified, using ($type) for output." }
+    $type
+  }
 
   let width = $width | default {
     let columns = term size | get columns
@@ -70,7 +84,7 @@ export def main [
 
     let output_html = if $debug { mktemp --tmpdir --suffix .html } else { '' }
 
-    let rendered = do { ^node $render $code $lang ($output | path expand) $output_html } | complete
+    let rendered = do { ^node $render $code $lang ($output | path expand) $output_html $output_type } | complete
     if $rendered.exit_code != 0 {
       error make { msg: ($rendered.stderr | str trim) }
     } else if $debug {

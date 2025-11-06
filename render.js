@@ -6,6 +6,7 @@ const code = process.argv[2];
 const lang = process.argv[3];
 const output = process.argv[4];
 const output_html = process.argv[5];
+const output_type = process.argv[6];
 
 const rendered = await codeToHtml(code, {
   lang: lang,
@@ -21,7 +22,7 @@ const rendered = await codeToHtml(code, {
 });
 
 const html = `<!doctype html>
-<html lang="en">
+<html lang="en-US">
   <head>
     <title>nu-shiki</title>
     <style>
@@ -52,9 +53,12 @@ if (output_html) {
   await fs.writeFile(output_html, html);
 }
 
-await captureWebsite.file(html, output, {
+const options = {
   defaultBackground: false,
-  element: "#view",
   inputType: "html",
   overwrite: true,
-});
+  type: output_type,
+  ...(output_type != "pdf" && { element: "#view" }),
+};
+
+await captureWebsite.file(html, output, options);
