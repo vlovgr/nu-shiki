@@ -21,7 +21,7 @@ export def main [
   --lang (-l): string@languages = "ansi" # The shiki language to use
   --format (-f) # Insert newlines and indentation for top-level pipes
   --output (-o): path = "~/Downloads/screenshot.png" # The output path
-  --output-type (-t): string@[jpeg pdf png webp] # The output type (defaults to guessing)
+  --output-type (-t): string@[html jpeg pdf png webp] # The output type (defaults to guessing)
   --prompt (-p): string = "○ " # The prompt indicator including space
   --theme (-t): string@themes = "material-theme" # The shiki theme to use
   --width (-w): int # The maximum number of characters per line
@@ -31,6 +31,7 @@ export def main [
 
   let output_type = $output_type | default {
     let type = match $output {
+      $s if $s =~ '\.(htm|html)$' => 'html'
       $s if $s =~ '\.(jpg|jpeg)$' => 'jpeg'
       $s if $s =~ '\.pdf$' => 'pdf'
       $s if $s =~ '\.png$' => 'png'

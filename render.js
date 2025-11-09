@@ -54,12 +54,16 @@ if (output_html) {
   await fs.writeFile(output_html, html);
 }
 
-const options = {
-  defaultBackground: false,
-  inputType: "html",
-  overwrite: true,
-  type: output_type,
-  ...(output_type != "pdf" && { element: "#view" }),
-};
+if (output_type == "html") {
+  await fs.writeFile(output, html);
+} else {
+  const options = {
+    defaultBackground: false,
+    inputType: "html",
+    overwrite: true,
+    type: output_type,
+    ...(output_type != "pdf" && { element: "#view" }),
+  };
 
-await captureWebsite.file(html, output, options);
+  await captureWebsite.file(html, output, options);
+}
