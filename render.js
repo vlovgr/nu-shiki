@@ -7,10 +7,11 @@ const lang = process.argv[3];
 const output = process.argv[4];
 const output_html = process.argv[5];
 const output_type = process.argv[6];
+const theme = process.argv[7];
 
 const rendered = await codeToHtml(code, {
   lang: lang,
-  theme: "material-theme",
+  theme: theme,
   colorReplacements: {
     "#263238": "#1b2b34",
     "#89ddff": "#5fb3b3",

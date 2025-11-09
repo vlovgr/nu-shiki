@@ -23,6 +23,7 @@ export def main [
   --output (-o): path = "~/Downloads/screenshot.png" # The output path
   --output-type (-t): string@[jpeg pdf png webp] # The output type (defaults to guessing)
   --prompt (-p): string = "○ " # The prompt indicator including space
+  --theme (-t): string = "material-theme" # The shiki theme to use
   --width (-w): int # The maximum number of characters per line
   command?: string # The terminal command to show in the image
 ]: any -> nothing {
@@ -84,7 +85,7 @@ export def main [
 
     let output_html = if $debug { mktemp --tmpdir --suffix .html } else { '' }
 
-    let rendered = do { ^node $render $code $lang ($output | path expand) $output_html $output_type } | complete
+    let rendered = do { ^node $render $code $lang ($output | path expand) $output_html $output_type $theme } | complete
     if $rendered.exit_code != 0 {
       error make { msg: ($rendered.stderr | str trim) }
     } else if $debug {
