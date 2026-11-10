@@ -3,6 +3,9 @@
   "private": "true",
   "dependencies": {
     "capture-website": "^5.1.0",
-    "shiki": "^4.2.0"
+    "shiki": "^4.6.0"
+  },
+  "allowScripts": {
+    "puppeteer@24.29.0": true
   }
 }
